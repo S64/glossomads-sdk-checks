@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".MainActivity">
+
+    <data>
+
+        <import type="jp.s64.example.test.glossomads.BuildConfig"/>
+        <import type="android.view.View"/>
+
+        <variable name="isConfigured" type="Boolean"/>
+        <variable name="isAvailable" type="Boolean"/>
+
+        <variable name="isStarted" type="Boolean"/>
+        <variable name="isClicked" type="Boolean"/>
+        <variable name="isPause" type="Boolean"/>
+        <variable name="isResume" type="Boolean"/>
+        <variable name="isSkip" type="Boolean"/>
+
+        <variable name="isRewarded" type="Boolean"/>
+        <variable name="isFinish" type="Boolean"/>
+        <variable name="isClosed" type="Boolean"/>
+
+        <variable name="logs" type="String"/>
+
+    </data>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <FrameLayout
+                android:visibility="@{(BuildConfig.ADCORSA_APP_ID == null || BuildConfig.ADCORSA_ZONE_ID == null) ? View.VISIBLE : View.GONE}"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                tools:visibility="gone">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="'adcorsa.appId' or 'adcorsa.zoneId' is not defined in `local.properties`."/>
+
+        </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:visibility="@{(BuildConfig.ADCORSA_APP_ID != null &amp;&amp; BuildConfig.ADCORSA_ZONE_ID != null) ? View.VISIBLE : View.GONE}"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                tools:visibility="visible">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ &quot;AppId: '&quot; + BuildConfig.ADCORSA_APP_ID + &quot;'&quot; }"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="GroupId: ''"
+                    android:id="@+id/textView"/>
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ &quot;ZoneId: '&quot; + BuildConfig.ADCORSA_ZONE_ID + &quot;'&quot; }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="UnitId: ''"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView" android:id="@+id/textView2"/>
+
+            <Button
+                    android:text="Configure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/configureButton"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <Button
+                    android:text="Show"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/showButton"
+                    app:layout_constraintStart_toEndOf="@+id/configureButton"
+                    app:layout_constraintTop_toTopOf="@+id/configureButton"/>
+
+            <CheckBox
+                    android:text="GlossomAds.isConfigured"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/configuredCheckBox"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:checked="@{isConfigured}"
+                    android:enabled="@{isConfigured != null}"
+                    app:layout_constraintTop_toBottomOf="@+id/configureButton"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsAdAvailabilityChange(_, bool)"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/availabilityCheckBox"
+                    android:checked="@{isAvailable}"
+                    android:enabled="@{isAvailable != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/configuredCheckBox"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoStart"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:checked="@{isStarted}"
+                    android:id="@+id/startedCheckBox"
+                    android:enabled="@{isStarted != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/availabilityCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoClick"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:id="@+id/clickedCheckBox"
+                    android:focusable="false"
+                    android:checked="@{isClicked}"
+                    android:enabled="@{isClicked != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/startedCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoPause"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/pausedCheckBox"
+                    android:checked="@{isPause}"
+                    android:enabled="@{isPause != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/clickedCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoResume"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:checked="@{isResume}"
+                    android:id="@+id/resumedCheckBox"
+                    android:enabled="@{isResume != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/pausedCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoSkip"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:checked="@{isSkip}"
+                    android:id="@+id/skipCheckBox"
+                    android:enabled="@{isSkip != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/resumedCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsAdReward(reward#succeed)"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/rewardedCheckBox"
+                    android:checked="@{isRewarded}"
+                    android:enabled="@{isRewarded != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/skipCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoFinish"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/finishedCheckBox"
+                    android:checked="@{isFinish}"
+                    android:enabled="@{isFinish != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rewardedCheckBox"/>
+
+            <CheckBox
+                    android:text="onGlossomAdsVideoClose"
+                    android:layout_width="wrap_content"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/closedCheckBox"
+                    android:checked="@{isClosed}"
+                    android:enabled="@{isClosed != null}"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/finishedCheckBox"/>
+
+            <ScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp" app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/closedCheckBox">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{logs}"
+                        android:textIsSelectable="true"
+                        tools:text="logs"/>
+
+            </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>
